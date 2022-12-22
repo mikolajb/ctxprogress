@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// StartReporting instantiates Reporter for a given context (and associated Receiver within it).
 func StartReporting(ctx context.Context) Reporter {
 	value := ctx.Value(key)
 
@@ -24,6 +25,7 @@ func StartReporting(ctx context.Context) Reporter {
 	return newReporter(receiver)
 }
 
+// WithProgressReceiver returns Receiver and a new context with a Receiver in it.
 func WithProgressReceiver(ctx context.Context) (context.Context, Receiver) {
 	receiver := newReceiver()
 
@@ -39,6 +41,7 @@ type contextKey int
 
 var key contextKey
 
+// Reporter is an entity that can report progress.
 type Reporter interface {
 	Report(currentValue, total int)
 }
@@ -64,6 +67,7 @@ func newReporter(receiver *receiver) *reporter {
 	}
 }
 
+// Receiver is an entity that reads progress of all associated Reporters.
 type Receiver interface {
 	Receive() (currentValue, total int)
 }
